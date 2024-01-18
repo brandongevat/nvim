@@ -43,6 +43,17 @@ P.S. You can delete this when you're done too. It's your config now :)
 --  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
+vim.keymap.set('n', '<leader>pv', vim.cmd.Ex)
+vim.keymap.set('n', '<leader>l', ':%!prettierd %<CR>| :w<CR>')
+
+vim.opt.tabstop = 2
+vim.opt.shiftwidth = 2
+vim.opt.expandtab = true
+vim.bo.softtabstop = 2
+
+vim.opt.number = true
+vim.opt.relativenumber = true
+vim.opt.signcolumn = "number"
 
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    https://github.com/folke/lazy.nvim
@@ -113,7 +124,7 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim', opts = {} },
+  { 'folke/which-key.nvim',  opts = {} },
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -190,11 +201,24 @@ require('lazy').setup({
   },
 
   {
-    -- Theme inspired by Atom
-    'navarasu/onedark.nvim',
+    'rose-pine/neovim',
+    name = 'rose-pine',
+    lazy = false,
     priority = 1000,
+    opts = {
+      disable_background = true,
+    },
     config = function()
-      vim.cmd.colorscheme 'onedark'
+      local p = require('rose-pine.palette')
+
+      vim.cmd.colorscheme('rose-pine')
+      vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
+      vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
+      vim.api.nvim_set_hl(0, 'String', { fg = p.rose })
+      vim.api.nvim_set_hl(0, 'Number', { fg = p.rose })
+      vim.api.nvim_set_hl(0, 'Float', { fg = p.rose })
+      vim.api.nvim_set_hl(0, 'Constant', { fg = p.rose })
+      vim.api.nvim_set_hl(0, 'Character', { fg = p.rose })
     end,
   },
 
@@ -205,9 +229,29 @@ require('lazy').setup({
     opts = {
       options = {
         icons_enabled = false,
-        theme = 'onedark',
         component_separators = '|',
         section_separators = '',
+      },
+    },
+  },
+
+  {
+    "zbirenbaum/copilot.lua",
+    cmd = "Copilot",
+    build = ":Copilot auth",
+    opts = {
+      suggestion = {
+        enabled = true,
+        auto_trigger = true,
+        accept = false,
+        keymap = {
+          accept = '<ALT+/',
+        }
+      },
+      panel = { enabled = true, auto_refresh = true },
+      filetypes = {
+        markdown = true,
+        help = true,
       },
     },
   },
@@ -569,6 +613,13 @@ local servers = {
   -- rust_analyzer = {},
   -- tsserver = {},
   -- html = { filetypes = { 'html', 'twig', 'hbs'} },
+  rust_analyzer = {
+    ["rust-analyzer"] = {
+      checkOnSave = {
+        command = "clippy",
+      },
+    },
+  },
 
   lua_ls = {
     Lua = {
@@ -579,6 +630,14 @@ local servers = {
     },
   },
 }
+
+
+-- Set up GitSigns highlights
+vim.api.nvim_command('highlight GitSignsAdd guibg=NONE')
+vim.api.nvim_command('highlight GitSignsChange guibg=NONE')
+vim.api.nvim_command('highlight GitSignsDelete guibg=NONE')
+vim.api.nvim_command('highlight CursorLine guibg=NONE')
+vim.api.nvim_command('hi! link SignColumn normal')
 
 -- Setup neovim lua configuration
 require('neodev').setup()

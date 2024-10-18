@@ -24,6 +24,14 @@ return require('packer').startup(function(use)
   use('nvim-treesitter/nvim-treesitter', {run = ':TSUpdate'})
   use('nvim-treesitter/playground')
 
+	use {
+    'fatih/vim-go',
+    config = function()
+      vim.g.go_fmt_command = "gofmt"
+      vim.cmd [[autocmd BufWritePre *.go :silent! lua vim.lsp.buf.formatting_sync()]]
+    end
+  }
+
   use {
 	  'VonHeikemen/lsp-zero.nvim',
 	  branch = 'v3.x',

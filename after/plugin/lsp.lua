@@ -15,13 +15,13 @@ require("mason-lspconfig").setup({
 	ensure_installed = {
 		"lua_ls",
 		"rust_analyzer",
-		"tsserver",
+		"clangd"
 	},
 	handlers = {
 		function(server_name)
 			require("lspconfig")[server_name].setup({
 				capabilities = capabilities,
-				on_attach = function(client, bufnr)
+				on_attach = function(_, bufnr)
 					vim.api.nvim_buf_set_keymap(bufnr, "n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>",
 						{ noremap = true, silent = true })
 				end,
@@ -59,8 +59,6 @@ require("mason-lspconfig").setup({
 		end,
 	}
 })
-
-local cmp_select = { behavior = cmp.SelectBehavior.Select }
 
 cmp.setup({
 	snippet = {

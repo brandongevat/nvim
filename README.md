@@ -5,7 +5,7 @@
 ## Installation
 1. Clone the repo:
     ```bash
-    git clone --depth 1 https://github.com/nvim \
+    git clone --depth 1 https://github.com/brandongevat/nvim \
         ~/.config/nvim 
     ```
 

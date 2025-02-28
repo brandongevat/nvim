@@ -88,6 +88,14 @@ return require('lazy').setup({
 					"lua_ls",
 					"rust_analyzer",
 					"gopls",
+					"clangd",
+					"basedpyright",
+					"dockerls",
+					"docker_compose_language_service",
+					"bashls",
+					"ansiblels",
+					"yamlls",
+					"vtsls",
 				},
 				handlers = {
 
@@ -109,6 +117,13 @@ return require('lazy').setup({
 									}
 								}
 							}
+						}
+					end,
+
+					["basedpyright"] = function()
+						local lspconfig = require("lspconfig")
+						lspconfig.basedpyright.setup {
+							capabilities = capabilities
 						}
 					end,
 				}

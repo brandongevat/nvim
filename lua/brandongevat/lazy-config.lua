@@ -17,25 +17,20 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 return require('lazy').setup({
-	-- install without yarn or npm
 	{
 		"iamcco/markdown-preview.nvim",
-		cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
 		ft = { "markdown" },
-		build = function() vim.fn["mkdp#util#install"]() end,
-	},
-
-	-- install with yarn or npm
-	{
-		"iamcco/markdown-preview.nvim",
-		cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-		build = "cd app && pnpm install",
-		init = function()
-			vim.g.mkdp_filetypes = { "markdown" }
+		build = function()
+			-- First install yarn if needed
+			if vim.fn.executable('yarn') == 0 then
+				vim.fn.system('pnpm install -g yarn')
+			end
+			vim.fn.system('cd ~/.local/share/nvim/lazy/markdown-preview.nvim/app && yarn install')
 		end,
-		ft = { "markdown" },
+		config = function()
+			vim.g.mkdp_browser = 'firefox'
+		end,
 	},
-
 
 	{
 		"yetone/avante.nvim",
@@ -45,10 +40,10 @@ return require('lazy').setup({
 			provider = "openai",
 			openai = {
 				endpoint = "https://api.openai.com/v1",
-				model = "o1", -- your default model
+				model = "gpt-4o", -- your default model
 				timeout = 30000,
 				temperature = 0,
-				max_completion_tokens = 8192,
+				max_tokens = 8192,
 			},
 		},
 		build = "make",

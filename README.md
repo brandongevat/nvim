@@ -1,3 +1,4 @@
+
 # Installation
 ## Pre-requisites
 - [NVIM 0.9.0+](https://github.com/neovim/neovim/releases/)
